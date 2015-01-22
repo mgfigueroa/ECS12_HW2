@@ -1,13 +1,14 @@
 float timer = 0;
 int r = 750;
 Square array[] = new Square[10];
+Square rear[] = new Square[250];
 
 private class Square {
   private int len;
   private int myStroke;
   private int x;
   private int xr;
-  private int y;
+  public int y;
   private int yl;
   private int xMove;
   private int yMove;
@@ -20,7 +21,7 @@ private class Square {
     myStroke = stk;
     //strokeColor = color(random(255),random(255),random(255));
     //fillColor = color(random(255),random(255),random(255)); 
-    strokeColor = color(184,134,11);
+    strokeColor = color(184, 134, 11);
     fillColor = color(255, 255, 0);
     x = int(random(-150, 150)) + width/2;
     y = int(random(-150, 150)) + (height/2) - 100;
@@ -29,6 +30,19 @@ private class Square {
       yMove = int(random(-3.9, 3.9));
     }
   }
+
+
+  public Square(int side, int stk, boolean existstooverload) {
+    len = side;
+    myStroke = stk;
+    strokeColor = color(25, 25, 112);
+    fillColor = color(102, 0, 204);
+    x = int(random(0, 500));
+    y = int(random(-500, -15));
+    xMove = 0; // No x movement
+    yMove = int(random(1, 5.9));
+  }
+
 
   private void render() {
     //LEFT SIDE
@@ -54,6 +68,13 @@ private class Square {
     strokeWeight(myStroke);
     rect(x, y, len, len);
   }
+  private void backRender() {
+    y += yMove;
+    fill(fillColor);
+    stroke(strokeColor);
+    strokeWeight(myStroke);
+    rect(x, y, len, len);
+}
 }
 
 
@@ -76,6 +97,15 @@ void draw() {
 
   background( 0, 140 + abs(oscillation(true, 41, timer)), 185 + abs(oscillation(true, 70, timer)));//The oscillating blue background
 
+
+for(int i = 0; i < 250; i++){
+  if(rear[i] == null) rear[i] = new Square(10, 2, true);
+  if(rear[i].y > 520) rear[i] = new Square(10, 2, true);
+  rear[i].backRender();
+}
+
+
+
   for (int i = 0; i < 10; i++) {
     //if (array[i].existence = false) {
     if (array[i] == null) {
@@ -83,19 +113,6 @@ void draw() {
     }
     array[i].render();
   }
-
-
-  //println(array[2].existence);
-
-  //This creates the four corner circles
-
-  fill(102, 0, 204);
-  stroke(25, 25, 112);
-  strokeWeight(10);
-  ellipse(0, 0, oscillation(true, mag, timer), oscillation(true, mag, timer));
-  ellipse(500, 500, oscillation(true, mag, timer), oscillation(true, mag, timer));
-  ellipse(500, 0, oscillation(true, mag, timer), oscillation(true, mag, timer));
-  ellipse(0, 500, oscillation(true, mag, timer), oscillation(true, mag, timer));
 
   //Red lines connecting red circles
   stroke(150, 0, 0);
