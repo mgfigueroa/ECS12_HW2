@@ -1,84 +1,167 @@
 float timer = 0;
 int r = 750;
+int strk = 2;
+Square array[] = new Square[4];
+
+public class Square {
+  public int length;
+  public int x;
+  public int xr;
+  public int y;
+  public int yl;
+  public int xMove;
+  public int yMove;
+  public boolean existence;
+  public Square() {
+    existence = false;
+  }
+  public Square(int any) {
+    if (!existence) {
+      x = int(random(-150, 150)) + width/2;
+      y = int(random(-150, 150)) + (height/2) - 100;
+      while(xMove == 0 && yMove == 0){
+      xMove = int(random(-3.9, 3.9));
+      yMove = int(random(-3.9, 3.9));
+      }
+    }
+    existence = true;
+    //rect(x, y, w, w);
+  }
+  public Square(int sideLength, int xCoordinate, int yCoordinate) {
+    if (!existence) {
+      x = xCoordinate;
+      y = yCoordinate;
+      xMove = 0;
+      yMove = 0;
+      existence = true;
+    }
+  }
+  public void wallBounce(int w) {
+    //LEFT SIDE
+    if (x <= 0) {
+      xMove = -xMove;
+    } 
+    //BOTTOM SIDE
+    if ( (y >= (height-w-strk)) ) {
+      yMove = -yMove;
+    }
+    //RIGHT SIDE
+    if (x >= (width-w)) {
+      xMove = -xMove;
+    } 
+    //TOP SIDE
+    if (y <= 0) {
+      yMove = -yMove;
+    }
+  }
+  public void move() {
+    x += xMove;
+    y += yMove;
+  }
+  public void render(int w) {
+    rect(x, y, w, w);
+  }
+}
+
 
 void setup() {
   size(500, 500);
   background(0);
+  // for (int i = 0; i < 4; i++) {
+  // array[i] = new Square();
+  //}
 }
 
 void draw() {
+
+
+
+
   timer += .05; //timer will be used for sin and cos functions. Gradually gets larger
   if (r > 150) r--; //Used for the radius of the middle circle. 
   int mag = 500;//For the size of the corner circles
 
   background( 0, 140 + abs(oscillation(true, 41, timer)), 185 + abs(oscillation(true, 70, timer)));//The oscillating blue background
 
+  stroke(strk);
+  for (int i = 0; i < 4; i++) {
+    //if (array[i].existence = false) {
+    if (array[i] == null){
+      array[i] = new Square(1);
+    }
+    //array[i].existence = true;
+    //} else {
+    //fill();
+    array[i].render(50);
+    array[i].move();
+    array[i].wallBounce(50);
+  }
+
+
+  //println(array[2].existence);
+
   //This creates the four corner circles
-  
+
   fill(102, 0, 204);
+  stroke(25, 25, 112);
+  strokeWeight(10);
   ellipse(0, 0, oscillation(true, mag, timer), oscillation(true, mag, timer));
   ellipse(500, 500, oscillation(true, mag, timer), oscillation(true, mag, timer));
   ellipse(500, 0, oscillation(true, mag, timer), oscillation(true, mag, timer));
   ellipse(0, 500, oscillation(true, mag, timer), oscillation(true, mag, timer));
 
-    //Red lines connecting red circles
-      stroke(150, 0, 0);
-    line(250 + oscillation(true, 200, timer+radians(60*2) ), 
-    250 + oscillation(false, 200, radians(timer+60*2)),
-    250 + oscillation(true, 200, timer+radians(60*4) ),
-    250 + oscillation(false, 200, radians(timer+60*4)) );
-    
-    line(250 + oscillation(true, 200, timer+radians(60*2) ), 
-    250 + oscillation(false, 200, radians(timer+60*2)),
-    250 + oscillation(true, 200, timer+radians(60*6) ),
-    250 + oscillation(false, 200, radians(timer+60*6)) );
-    
-    line(250 + oscillation(true, 200, timer+radians(60*6) ), 
-    250 + oscillation(false, 200, radians(timer+60*6)),
-    250 + oscillation(true, 200, timer+radians(60*4) ),
-    250 + oscillation(false, 200, radians(timer+60*4)) );
-    
-    //Blue lines connecting blue circles
-      stroke(0, 0, 150);
-    line(250 + oscillation(true, 150, timer+radians(60) ), 
-    250 + oscillation(false, 150, radians(timer+60)),
-    250 + oscillation(true, 150, timer+radians(60*3) ),
-    250 + oscillation(false, 150, radians(timer+60*3)) );
-    
-    line(250 + oscillation(true, 150, timer+radians(60) ), 
-    250 + oscillation(false, 150, radians(timer+60)),
-    250 + oscillation(true, 150, timer+radians(60*5) ),
-    250 + oscillation(false, 150, radians(timer+60*5)) );
-    
-    line(250 + oscillation(true, 150, timer+radians(60*3) ), 
-    250 + oscillation(false, 150, radians(timer+60*3)),
-    250 + oscillation(true, 150, timer+radians(60*5) ),
-    250 + oscillation(false, 150, radians(timer+60*5)) );
+  //Red lines connecting red circles
+  stroke(150, 0, 0);
+  line(250 + oscillation(true, 200, timer+radians(60*2) ), 
+  250 + oscillation(false, 200, radians(timer+60*2)), 
+  250 + oscillation(true, 200, timer+radians(60*4) ), 
+  250 + oscillation(false, 200, radians(timer+60*4)) );
+
+  line(250 + oscillation(true, 200, timer+radians(60*2) ), 
+  250 + oscillation(false, 200, radians(timer+60*2)), 
+  250 + oscillation(true, 200, timer+radians(60*6) ), 
+  250 + oscillation(false, 200, radians(timer+60*6)) );
+
+  line(250 + oscillation(true, 200, timer+radians(60*6) ), 
+  250 + oscillation(false, 200, radians(timer+60*6)), 
+  250 + oscillation(true, 200, timer+radians(60*4) ), 
+  250 + oscillation(false, 200, radians(timer+60*4)) );
+
+  //Blue lines connecting blue circles
+  stroke(0, 0, 150);
+  line(250 + oscillation(true, 150, timer+radians(60) ), 
+  250 + oscillation(false, 150, radians(timer+60)), 
+  250 + oscillation(true, 150, timer+radians(60*3) ), 
+  250 + oscillation(false, 150, radians(timer+60*3)) );
+
+  line(250 + oscillation(true, 150, timer+radians(60) ), 
+  250 + oscillation(false, 150, radians(timer+60)), 
+  250 + oscillation(true, 150, timer+radians(60*5) ), 
+  250 + oscillation(false, 150, radians(timer+60*5)) );
+
+  line(250 + oscillation(true, 150, timer+radians(60*3) ), 
+  250 + oscillation(false, 150, radians(timer+60*3)), 
+  250 + oscillation(true, 150, timer+radians(60*5) ), 
+  250 + oscillation(false, 150, radians(timer+60*5)) );
 
 
   //For loop will make 6 circles
   for (int i = 1; i < 7; i+= 1) {
 
     if (i % 2 == 0) {//Different settings for 3 out of the 6 circles (color, size, etc)
-      fill(255, 0, 0);
+      fill(220, 0, 0);
       stroke(150, 0, 0);
       ellipse(250 + oscillation(true, 200, timer+radians(60*i) ), 250 + oscillation(false, 200, radians(timer+60*i)), oscillation(false, 50, timer), oscillation(false, 50, timer)); // Red circles
-    } 
-    else {//The other 3 circles
+    } else {//The other 3 circles
       fill(0, 0, 255);
       stroke(0, 0, 150);
       ellipse(250 + oscillation(true, 150, timer+radians(60*i) ), 250 + oscillation(false, 150, radians(timer+60*i)), oscillation(false, 100, timer), oscillation(false, 100, timer)); // Blue circles
     }
-    
-
-    
-    
-    
   }
 
   //The middle circle which goes in a circle around the outer middle ellipse
   strokeWeight(3);
-  stroke(50,125,200);
+  stroke(50, 125, 200);
   pushMatrix();
   fill(255, 65);
   translate(250, 250);
