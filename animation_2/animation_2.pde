@@ -1,7 +1,6 @@
 float timer = 0;
 int r = 750;
-int strk = 2;
-Square array[] = new Square[4];
+Square array[] = new Square[10];
 
 private class Square {
   private int len;
@@ -12,11 +11,17 @@ private class Square {
   private int yl;
   private int xMove;
   private int yMove;
+  private color fillColor;
+  private color strokeColor;
   private boolean existence;
 
   public Square(int side, int stk) {
     len = side;
     myStroke = stk;
+    //strokeColor = color(random(255),random(255),random(255));
+    //fillColor = color(random(255),random(255),random(255)); 
+    strokeColor = color(184,134,11);
+    fillColor = color(255, 255, 0);
     x = int(random(-150, 150)) + width/2;
     y = int(random(-150, 150)) + (height/2) - 100;
     while (xMove == 0 && yMove == 0) { // Don't want a stand still square
@@ -44,6 +49,8 @@ private class Square {
     }
     x += xMove;
     y += yMove;
+    fill(fillColor);
+    stroke(strokeColor);
     strokeWeight(myStroke);
     rect(x, y, len, len);
   }
@@ -69,11 +76,10 @@ void draw() {
 
   background( 0, 140 + abs(oscillation(true, 41, timer)), 185 + abs(oscillation(true, 70, timer)));//The oscillating blue background
 
-  stroke(strk);
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 10; i++) {
     //if (array[i].existence = false) {
     if (array[i] == null) {
-      array[i] = new Square(50, 3);
+      array[i] = new Square(20, 3);
     }
     array[i].render();
   }
