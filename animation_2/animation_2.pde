@@ -3,63 +3,49 @@ int r = 750;
 int strk = 2;
 Square array[] = new Square[4];
 
-public class Square {
-  public int length;
-  public int x;
-  public int xr;
-  public int y;
-  public int yl;
-  public int xMove;
-  public int yMove;
-  public boolean existence;
-  public Square() {
-    existence = false;
-  }
-  public Square(int any) {
-    if (!existence) {
-      x = int(random(-150, 150)) + width/2;
-      y = int(random(-150, 150)) + (height/2) - 100;
-      while(xMove == 0 && yMove == 0){
+private class Square {
+  private int len;
+  private int myStroke;
+  private int x;
+  private int xr;
+  private int y;
+  private int yl;
+  private int xMove;
+  private int yMove;
+  private boolean existence;
+
+  public Square(int side, int stk) {
+    len = side;
+    myStroke = stk;
+    x = int(random(-150, 150)) + width/2;
+    y = int(random(-150, 150)) + (height/2) - 100;
+    while (xMove == 0 && yMove == 0) { // Don't want a stand still square
       xMove = int(random(-3.9, 3.9));
       yMove = int(random(-3.9, 3.9));
-      }
-    }
-    existence = true;
-    //rect(x, y, w, w);
-  }
-  public Square(int sideLength, int xCoordinate, int yCoordinate) {
-    if (!existence) {
-      x = xCoordinate;
-      y = yCoordinate;
-      xMove = 0;
-      yMove = 0;
-      existence = true;
     }
   }
-  public void wallBounce(int w) {
+
+  private void render() {
     //LEFT SIDE
     if (x <= 0) {
       xMove = -xMove;
     } 
     //BOTTOM SIDE
-    if ( (y >= (height-w-strk)) ) {
+    if ( (y >= (height-len-myStroke)) ) {
       yMove = -yMove;
     }
     //RIGHT SIDE
-    if (x >= (width-w)) {
+    if (x >= (width-len)) {
       xMove = -xMove;
     } 
     //TOP SIDE
     if (y <= 0) {
       yMove = -yMove;
     }
-  }
-  public void move() {
     x += xMove;
     y += yMove;
-  }
-  public void render(int w) {
-    rect(x, y, w, w);
+    strokeWeight(myStroke);
+    rect(x, y, len, len);
   }
 }
 
@@ -86,15 +72,10 @@ void draw() {
   stroke(strk);
   for (int i = 0; i < 4; i++) {
     //if (array[i].existence = false) {
-    if (array[i] == null){
-      array[i] = new Square(1);
+    if (array[i] == null) {
+      array[i] = new Square(50, 3);
     }
-    //array[i].existence = true;
-    //} else {
-    //fill();
-    array[i].render(50);
-    array[i].move();
-    array[i].wallBounce(50);
+    array[i].render();
   }
 
 
