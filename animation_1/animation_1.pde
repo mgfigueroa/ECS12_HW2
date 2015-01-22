@@ -1,8 +1,6 @@
 float timer = 0;
 int r = 750;
 
-
-
 void setup() {
   size(500, 500);
   background(0);
@@ -35,7 +33,14 @@ void draw() {
     }
   }
   
-  //The middle ellipse
+  //The middle circle which goes in a circle around the outer middle ellipse
+  pushMatrix();
+  fill(255, 65);
+  translate(250, 250);
+  ellipse(oscillation(true, 50, timer), oscillation(false, 50, timer ), oscillation(true, 50, timer), oscillation(false, 50, timer ));
+  popMatrix();
+  
+  //The outer ellipse in the middle
   pushMatrix();
   translate(250, 250);
   rotate(radians(timer*150));
