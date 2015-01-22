@@ -50,7 +50,6 @@ void draw() {
   
 }
 
-
 float oscillation(boolean sin, int magnitude, float timer) {
   if (sin) return magnitude * sin(timer);
   else return magnitude * cos(timer);

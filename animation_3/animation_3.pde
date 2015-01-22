@@ -1,13 +1,14 @@
 float timer = 0;
 int r = 750;
-Square array[] = new Square[10]; //Array of yellow squares
+Square array[] = new Square[10]; //Yellow Squares
+Square rear[] = new Square[250]; //Purple Squares
 
 private class Square {
   
   private int len;
   private int myStroke;
   private int x;
-  private int y;
+  public int y;
   private int xMove;
   private int yMove;
   private color fillColor;
@@ -17,16 +18,26 @@ private class Square {
   public Square(int side, int stk) {
     len = side;
     myStroke = stk;
-    //strokeColor = color(random(255),random(255),random(255));
-    //fillColor = color(random(255),random(255),random(255)); 
-    strokeColor = color(184,134,11);
+    strokeColor = color(184, 134, 11);
     fillColor = color(255, 255, 0);
-    x = int(random(-150, 150)) + width/2;
-    y = int(random(-150, 150)) + (height/2) - 100;
+    x = int(random(50, 450)); // Starting x somewhere within the window
+    y = int(random(50, 450)); // Starting y somewhere within the window
     while (xMove == 0 && yMove == 0) { // Don't want a stand still square
-      xMove = int(random(-3.9, 3.9));
-      yMove = int(random(-3.9, 3.9));
+      xMove = int(random(-3.9, 3.9)); // Completely random x velocity 
+      yMove = int(random(-3.9, 3.9)); // Completely random y velocity
     }
+  }
+
+  public Square(int side, int stk, boolean existstooverload) { 
+    // The bool does nothing but let me overload the constructor, probably very badly coded
+    len = side; 
+    myStroke = stk;
+    strokeColor = color(25, 25, 112);
+    fillColor = color(102, 0, 204);
+    x = int(random(0, 500)); // Random x placement
+    y = int(random(-500, -15)); // Random y above the window
+    xMove = 0; // No x movement 
+    yMove = int(random(1, 5.9)); // Random positive y movement
   }
 
   private void render() {
@@ -45,9 +56,17 @@ private class Square {
     //TOP SIDE
     if (y <= 0) {
       yMove = -yMove;
-    }    
-    x += xMove;
-    y += yMove;
+    }
+    x += xMove; // update the x position
+    y += yMove; // update the y position
+    fill(fillColor);
+    stroke(strokeColor);
+    strokeWeight(myStroke);
+    rect(x, y, len, len);
+  }
+
+  private void backRender() { // update for the purple squares
+    y += yMove; // only need to update the y position
     fill(fillColor);
     stroke(strokeColor);
     strokeWeight(myStroke);
@@ -66,24 +85,19 @@ void draw() {
   if (r > 150) r--; //Used for the radius of the middle circle. 
   int mag = 500;//For the size of the corner circles
 
-  background( 0, 140 + abs(oscillation(true, 41, timer)), 185 + abs(oscillation(true, 70, timer)));//The oscillating blue background
+  background( 0, 140 + abs(oscillation(true, 41, timer)), 180 + abs(oscillation(true, 65, timer)));//The oscillating blue background
+
+  for (int i = 0; i < 250; i++) {
+    if (rear[i] == null) rear[i] = new Square(10, 2, true); // First creation of object
+    if (rear[i].y > 520) rear[i] = new Square(10, 2, true); // If the square leaves the window
+    rear[i].backRender(); // Moving the square
+  }
 
   for (int i = 0; i < 10; i++) {
     //if (array[i].existence = false) {
-    if (array[i] == null) {
-      array[i] = new Square(20, 3);
-    }
-    array[i].render();
+    if (array[i] == null) array[i] = new Square(20, 3); // First creation of the yellow squares
+    array[i].render(); // Update the square movement
   }
-
-  //This creates the four corner circles
-  fill(102, 0, 204);
-  stroke(25, 25, 112);
-  strokeWeight(10);
-  ellipse(0, 0, oscillation(true, mag, timer), oscillation(true, mag, timer));
-  ellipse(500, 500, oscillation(true, mag, timer), oscillation(true, mag, timer));
-  ellipse(500, 0, oscillation(true, mag, timer), oscillation(true, mag, timer));
-  ellipse(0, 500, oscillation(true, mag, timer), oscillation(true, mag, timer));
 
   //Red lines connecting red circles
   stroke(150, 0, 0);
